@@ -8,11 +8,7 @@ public class key2 {
         ArrayList list2 =  new ArrayList(16);
         System.out.println("请输入16位以下的密码：");
         Scanner sc = new Scanner(System.in);
-        //String str1=sc.nextLine();
         list.add(sc.nextLine());
-
-        //System.out.println(str1);
-        //
 
         for (String rawPassword:list){
             System.out.println(rawPassword);
@@ -26,22 +22,22 @@ public class key2 {
 
 
         System.out.print("经过加密后的密码是：");
-
+        //加密
         //(1)将每个字符的ASCII码加上它在字符串中的位置(1开始)和偏移值3
         int num[] = new int[16];
         System.out.println();
+        //for 循环将每一个字符转成ASCII码，再进行相应处理，并依次放入num[]数组中
         for (int i = 0; i < rawPassword.length(); i++) {
             if (rawPassword.charAt(i)<128){
             num[i] = (rawPassword.charAt(i))+ (i + 1 + 3);
             }else {
                 num[i]=rawPassword.charAt(i)+(i+1+3-20);
             }
+            //将ASCII码转成char类型并用list输出
             System.out.print((char) (num[i]));
             list2.add((char)(num[i]));
         }
         System.out.println("");
-//        Object[] objects2 = list2.toArray();
-//        System.out.println("before list2:"+Arrays.toString(objects2));
 
         //(2)将字符串的第一位和最后一位调换顺序
         Collections.swap(list2,0,list2.size()-1);
@@ -63,15 +59,17 @@ public class key2 {
             decryptlist.add(array1[i]);
         }
         //System.out.println("testdecryptlist："+decryptlist);
-        //(1)
+        
+        //(1)将decryptlist里的内容反转
         Collections.reverse(decryptlist);
         //System.out.println("反转后的密码是："+decryptlist);
-        //(2)
+        
+        //(2)将decryptlist内的第一个元素与最后一个元素调换
         Collections.swap(decryptlist,0,decryptlist.size()-1);
         //System.out.println("after decryptlist:"+decryptlist);
         encPassword = decryptlist.toString();
         System.out.println(encPassword);
-        //(3)
+        //(3)转成ASCII码后减去偏移值并进行相关操作，最后再转成字符输出
         System.out.println("请将以上内容重新输入（直接输入，无需用逗号隔开）：");
         Scanner sc3=new Scanner(System.in);
         String str3=sc3.nextLine();
@@ -85,37 +83,5 @@ public class key2 {
             System.out.print((char) (num2[i]));
             decryptlist.add((char)(num2[i]));
         }
-
-//        System.out.println("");
-//        Object[] objects3 =decryptlist.toArray();
-//        System.out.println("解密后的密码是:"+Arrays.toString(objects3));
     }
-
-
-//    public String Enc(){
-//
-//
-//        return "";
-//    }
-
-//     static String stringTranfromAscii(String value){
-//        StringBuffer sbu =new StringBuffer();
-//        char[]chars =value.toCharArray();
-//        for (int i=0;i<chars.length;i++){
-//            if (i!=chars.length-1){
-//                sbu.append((int)chars[i]).append(",");
-//            }else{
-//                sbu.append((int)chars[i]);
-//            }
-//        }
-//        return sbu.toString();
-//     }
-
-
-
-    //
-    //public String Cne(){return "";}
-
-
-
 }
