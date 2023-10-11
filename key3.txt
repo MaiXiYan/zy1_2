@@ -1,0 +1,209 @@
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class key3 {
+    public static void main(String[] args) {
+        System.out.println("=============================");
+        System.out.println("欢迎使用密码管理系统");
+        System.out.println("=============================");
+        System.out.println("请选择操作：");
+        switch (1){
+        }
+        EncPassword encPassword=new EncPassword();
+        System.out.println("请输入密码：");
+        Scanner sc =new Scanner(System.in);
+        String encrypt=sc.nextLine();
+        System.out.print("加密后的密码是：");
+        encPassword.encrypt(encrypt);
+
+        DecPassword decPassword=new DecPassword();
+        System.out.println("请输入需要解密的密码：");
+        Scanner sc2 =new Scanner(System.in);
+        String dec=sc2.nextLine();
+        decPassword.dec(dec);
+
+        PasswordVerifiers passwordVerifiers=new PasswordVerifiers();
+        System.out.println("请输入您的密码");
+        Scanner sc3 = new Scanner(System.in);
+        String verPassword=sc3.nextLine();
+        passwordVerifiers.Verifier(verPassword);
+
+        PasswordGeneration passwordGeneration=new PasswordGeneration();
+        passwordGeneration.Generation();
+
+    }
+}
+//加密
+class EncPassword{
+    public void encrypt(String encrypt){
+        char[] password=new char[encrypt.length()];
+        for (int i=0;i<encrypt.length();i++){
+            char a=encrypt.charAt(i);
+            byte transascii=(byte)a;
+            transascii+=((i+1)+3);
+            password[i]=(char)transascii;
+        }
+        ArrayList list = new ArrayList<>();
+        for (int i=0;i<password.length;i++){
+            list.add(password[i]);
+        }
+        System.out.println(list);
+        Collections.swap(list,0,list.size()-1);
+        Collections.reverse(list);
+        String encPassword=list.toString();
+        System.out.println(encPassword);
+    }
+}
+
+//解密
+class DecPassword{
+    public void dec(String dec){
+        System.out.println("请输入加密后的密码(用逗号隔开)：");
+        Scanner sc2=new Scanner(System.in);
+        String encPassword=sc2.nextLine();
+        ArrayList decryptlist =new ArrayList(16);
+
+        String[] array1 = encPassword.split( ","/*\x00-\x7F*/);
+        for (int i=0;i<array1.length;i++){
+            decryptlist.add(array1[i]);
+        }
+        //System.out.println("testdecryptlist："+decryptlist);
+        //(1)
+        Collections.reverse(decryptlist);
+        //System.out.println("反转后的密码是："+decryptlist);
+        //(2)
+        Collections.swap(decryptlist,0,decryptlist.size()-1);
+        //System.out.println("after decryptlist:"+decryptlist);
+        encPassword = decryptlist.toString();
+        System.out.println(encPassword);
+        //(3)
+        System.out.println("请将以上内容重新输入（直接输入，无需用逗号隔开）：");
+        Scanner sc3=new Scanner(System.in);
+        String str3=sc3.nextLine();
+        System.out.println(str3);
+        System.out.println("");
+
+        int num2[]=new int[16];
+        System.out.print("解密后的密码是：");
+        decryptlist.clear();
+        for (int i = 0; i < array1.length; i++) {
+            num2[i] = (str3.charAt(i))-(i + 1 + 3);
+            System.out.print((char) (num2[i]));
+            decryptlist.add((char)(num2[i]));
+        }
+    }
+//        char[] decPassword=new char[dec.length()];
+//        for (int i=0;i<dec.length();i++){
+//            decPassword[i]=dec.charAt(decPassword.length-(i+1));
+//            //System.out.println("decPassword:"+decPassword[i]);
+//        }
+//
+//        ArrayList list =new ArrayList();
+//        for (int i=0;i<decPassword.length;i++){
+//            list.add(decPassword[i]);
+//        }
+////        String str1 =list.toString();
+////        System.out.println(str1);
+//
+//        Collections.reverse(list);
+////        String str2 =list.toString();
+////        System.out.println(str2);
+//
+//        Collections.swap(list,0,list.size()-1);
+////        String str3 =list.toString();
+////        System.out.println(str3);
+//
+//        char decPassword2[]=new char[list.size()];
+//        for (int i=0;i<decPassword2.length;i++){
+//            decPassword2[i]=(char)list.get(i);
+////            String str4=list
+//        }
+////        String str4=decPassword2.toString();
+////        System.out.println(str4);
+//        String str=list.toString();
+//        System.out.println(str);
+//
+//        Scanner sc3=new Scanner(System.in);
+//        String str5=sc3.nextLine();
+//        char decPassword3[]=new char[str5.length()];
+//        for(int i=0;i<str5.length();i++){
+//
+//        }
+//
+//        String[] array1 = encPassword.split( ","/*\x00-\x7F*/);
+//        for (int i=0;i<array1.length;i++){
+//            decryptlist.add(array1[i]);
+//        }
+//
+//        int num2[]=new int[16];
+//        System.out.print("解密后的密码是：");
+//        for (int i = 0; i < array1.length; i++) {
+//            num2[i] = (str3.charAt(i))-(i + 1 + 3);
+//            System.out.print((char) (num2[i]));
+//            decryptlist.add((char)(num2[i]));
+//        }
+//
+//        for (int i=0;i<decPassword3.length;i++){
+//            //System.out.print(decPassword3[i]);
+//        }
+//    }
+}
+
+//密码校验
+class PasswordVerifiers{
+    public void Verifier(String verPassword){
+
+        String regex1="(\\d)[^a-zA-Z]{8,}";String regex2="[a-zA-Z\\D]{8,}";
+       boolean value1=verPassword.matches(regex1);boolean value2=verPassword.matches(regex2);
+
+        String regex7 ="[A-Za-z0-9]{8,}";
+        String regex8 =".*[a-z]+.*";
+        String regex9 =".*[A-Z]+.*";
+        String regex10 =".*[0-9]+.*";
+        boolean value7=verPassword.matches(regex7);
+        Matcher m =Pattern.compile(regex8).matcher(verPassword);
+        System.out.println(m.matches());
+        Matcher m2 =Pattern.compile(regex9).matcher(verPassword);
+        Matcher m3 =Pattern.compile(regex10).matcher(verPassword);
+        System.out.println(m2.matches());
+        System.out.println(m3.matches());
+
+        if (verPassword.length()<8||(value1==true&&value2==false)||(value2==true&&value1==false)){
+            System.out.println("密码强度低");
+        }else if ((value7==true&&m.matches()==true)||value7==true&&m2.matches()==true){
+            System.out.println("密码强度中");
+        }else if (value7==true&&m.matches()==true&&m2.matches()==true&&m3.matches()==true){
+            System.out.println("密码强度高");
+        }else{
+            System.out.println("出错！");
+        }
+    }
+}
+
+//密码生成
+class PasswordGeneration{
+    public void Generation(){
+        System.out.println("请设置密码长度：");
+        Scanner sc4 =new Scanner(System.in);
+        byte len=sc4.nextByte();
+
+        SecureRandom random = new SecureRandom();
+        String uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String characterSet = uppercaseLetters + lowercaseLetters + numbers;
+        StringBuilder passwordBuilder=new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            int randomIndex = random.nextInt(characterSet.length());
+            char randomChar = characterSet.charAt(randomIndex);
+            passwordBuilder.append(randomChar);
+        }
+        String password = passwordBuilder.toString();
+        System.out.println("生成的密码为：" + password);
+    }
+}
